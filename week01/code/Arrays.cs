@@ -6,14 +6,20 @@ public static class Arrays
     /// integer greater than 0.
     /// </summary>
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
-    public static double[] MultiplesOf(double number, int length)
-    {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
 
-        return []; // replace this return statement with your own
+    /// Declare a fixed array to store the results
+    /// For loop that will run for the length of the array
+    /// For each iteration it will multiply the nummber by index+1
+    /// Return the array
+    public static double[] MultiplesOf(double number = 7, int length = 7)
+    {
+        var result = new double[length];
+        for (int i = 0; i < length; i++)
+        {
+            result[i] = number * (i + 1);
+        }
+
+        return result;
     }
 
     /// <summary>
@@ -23,11 +29,17 @@ public static class Arrays
     ///
     /// Because a list is dynamic, this function will modify the existing data list rather than returning a new list.
     /// </summary>
-    public static void RotateListRight(List<int> data, int amount)
+    /// 
+    /// Create the list of numbers to be rotated
+    /// Use a loop to iterate through the list using the amount to determine where to start
+    /// remove the numbers to the right of the amount and store them in a temorary list
+    /// add the temporary list to the front of the original list
+    public static List<int> data = new() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    public static void RotateListRight(List<int> data, int amount = 5)
     {
-        // TODO Problem 2 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
+            List<int> temp = data.GetRange(data.Count - amount, amount);
+            data.RemoveRange(data.Count - amount, amount);
+            data.InsertRange(0, temp);
+
     }
 }
