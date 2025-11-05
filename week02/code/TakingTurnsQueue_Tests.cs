@@ -12,6 +12,7 @@ public class TakingTurnsQueueTests
     // run until the queue is empty
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
     // Defect(s) Found: 
+    //The PersonQueue was attempting to use a List instead of a Queue data structure.
     public void TestTakingTurnsQueue_FiniteRepetition()
     {
         var bob = new Person("Bob", 2);
@@ -44,6 +45,8 @@ public class TakingTurnsQueueTests
     // After running 5 times, add George with 3 turns.  Run until the queue is empty.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, George, Sue, Tim, George, Tim, George
     // Defect(s) Found: 
+    // PersonQueue was attempting to use a List instead of a Queue data structure.
+    // Changed the structure to behave like Queue FIFO.
     public void TestTakingTurnsQueue_AddPlayerMidway()
     {
         var bob = new Person("Bob", 2);
@@ -86,6 +89,8 @@ public class TakingTurnsQueueTests
     // Run 10 times.
     // Expected Result: Bob, Tim, Sue, Bob, Tim, Sue, Tim, Sue, Tim, Tim
     // Defect(s) Found: 
+    // The GetNextPerson method was missing the condition to check and add the person with the infinite loops.
+    // Added the else if condition to check if the turns is <=0 to handle the 0 and negative turns and if matches, Enqueue to the Queue.
     public void TestTakingTurnsQueue_ForeverZero()
     {
         var timTurns = 0;
@@ -117,6 +122,8 @@ public class TakingTurnsQueueTests
     // Run 10 times.
     // Expected Result: Tim, Sue, Tim, Sue, Tim, Sue, Tim, Tim, Tim, Tim
     // Defect(s) Found: 
+    // The GetNextPerson method was missing the condition to check and add the person with the infinite loops.
+    // Added the else if condition to check if the turns is <=0 to handle the 0 and negative turns and if matches, Enqueue to the Queue.
     public void TestTakingTurnsQueue_ForeverNegative()
     {
         var timTurns = -3;

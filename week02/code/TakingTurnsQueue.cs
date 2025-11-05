@@ -40,15 +40,22 @@ public class TakingTurnsQueue
         else
         {
             Person person = _people.Dequeue();
+            Console.WriteLine($"Next person: {person.Name}, Turns left: {person.Turns}");
             if (person.Turns > 1)
             {
                 person.Turns -= 1;
                 _people.Enqueue(person);
             }
+            else if (person.Turns <= 0)
+            {
+                // Infinite turns
+                _people.Enqueue(person);
+            }
+                return person;
+            }
 
-            return person;
+
         }
-    }
 
     public override string ToString()
     {
