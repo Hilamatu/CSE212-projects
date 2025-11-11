@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Text.Json;
 
 public static class SetsAndMaps
@@ -19,10 +20,28 @@ public static class SetsAndMaps
     /// that there were no duplicates) and therefore should not be returned.
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
+    ///For each word I will create a reversed version and check if the reversed version exists in the set.
+    /// If the word exists in the set, both the word and the reversed will be added to the result list
+    /// If not found, add the word to the set.
+    /// COonvert the list to an array and return it.
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        HashSet<string> wordsSet = new HashSet<string>();
+        List<string> result = new List<string>();
+
+        foreach (string word in words)
+        {
+            string reversedWord = $"{word[1]}{word[0]}";
+            if (wordsSet.Contains(reversedWord) && word != reversedWord)// will check if the reversed word exists and will make sure the words is not the same such as "aa", "bb"
+            {
+                result.Add($"{word} & {reversedWord}");
+            }
+            else
+            {
+                wordsSet.Add(word);
+            }
+        }
+        return result.ToArray();
     }
 
     /// <summary>
@@ -36,13 +55,23 @@ public static class SetsAndMaps
     /// </summary>
     /// <param name="filename">The name of the file to read</param>
     /// <returns>fixed array of divisors</returns>
+    /// Will get the degree from the fields array and use it as the key for the dictionary.
+    /// if the degree already exists in the dictionary, will increment 1
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
         var degrees = new Dictionary<string, int>();
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3];
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree]++;
+            }
+            else
+            {
+                degrees.Add(degree, 1);
+            }
         }
 
         return degrees;
@@ -64,10 +93,53 @@ public static class SetsAndMaps
     /// Reminder: You can access a letter by index in a string by 
     /// using the [] notation.
     /// </summary>
+    /// First will normalize to lower case and remove spaces.
+    /// Check is the length is different as they cannpt be anagrams.
+    /// Create a dictionary ro count the occurences of each letter in word1
+    /// then will decrement the count for each letter in word2
+    /// if the fina count is != 0, returns false as they are no anagrams
+    /// Return true if 0 
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        word1 = word1.ToLower().Replace(" ", "");
+        word2 = word2.ToLower().Replace(" ", "");
+
+        if (word1.Length != word2.Length)
+        {
+            return false;
+        }
+        Dictionary<char, int> LetterCount = new Dictionary<char, int>();
+
+        foreach (char letter in word1)
+        {
+            if (LetterCount.ContainsKey(letter))
+            {
+                LetterCount[letter]++;
+            }
+            else
+            {
+                LetterCount.Add(letter, 1);
+            }
+        }
+        foreach (char letter in word2)
+        {
+            if (LetterCount.ContainsKey(letter))
+            {
+                LetterCount[letter]--;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        foreach (var count in LetterCount.Values)
+        {
+            if (count != 0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /// <summary>
