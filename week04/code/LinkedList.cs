@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Dynamic;
+using System.Globalization;
 
 public class LinkedList : IEnumerable<int>
 {
@@ -32,7 +34,21 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void InsertTail(int value)
     {
-        // TODO Problem 1
+        // Create the new node
+        Node newNode = new(value);
+        // If the list is empty, then point both head and tail to the new node.
+        if (_tail is null)
+        {
+            _head = newNode;
+            _tail =  newNode;
+        }
+        // If not empty, then only tail will be affected.
+        else
+        {
+            newNode.Prev = _tail; // First set the current tail as the previous node of the new node
+            _tail.Next = newNode; // Set the next node of the current tail to be the new node
+            _tail = newNode; // update the tail to the new node
+        }
     }
 
 
@@ -64,8 +80,20 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void RemoveTail()
     {
-        // TODO Problem 2
+        // if the list has only one item set both head and tail to null
+        if (_head == _tail)
+        {
+            _head = null;
+            _tail = null;
+        }
+        // if the list has more items, only update the tail
+        else
+        {
+            _tail.Prev.Next = null; // Set the next of the previous node from tail to null 
+            _tail = _tail.Prev; //Set the second from last node to be the new tail
+        }
     }
+    
 
     /// <summary>
     /// Insert 'newValue' after the first occurrence of 'value' in the linked list.
@@ -108,7 +136,31 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void Remove(int value)
     {
-        // TODO Problem 3
+        //Store the current node in the 'curr' variable starting at the head
+        //Use the 'while' loop to iterate throughthe list until curr is null and the value is found
+        Node? curr = _head;
+        while (curr is not null && curr.Data != value)
+        {
+            curr = curr.Next; // move to the next node
+        }
+           // If not found, throw
+        if (curr is null)
+        {
+            return; // Value not found, exit the method
+        }
+        if (curr == _head)
+        {
+            RemoveHead(); //Calls the RemoveHead moethod to remove head node
+        }
+        else if (curr == _tail)
+        {
+            RemoveTail();//Calls the RemoveTail method to reomve tail node
+        }
+        else
+        {
+            curr!.Next!.Prev = curr.Prev; //Set the previous node of the next node to the previous node being removed
+            curr.Prev!.Next = curr.Next; //Set the Next node of the previous node to the next node being removed
+        }
     }
 
     /// <summary>
@@ -116,7 +168,18 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void Replace(int oldValue, int newValue)
     {
-        // TODO Problem 4
+        //Store the current node in the 'curr' variable starting at the head 
+        Node? curr = _head;
+        //Use the 'while' loop to iterate through the list until curr is null
+        while (curr is not null)
+        {
+            //If the current node == oldValue, replace it with the new Value
+            if (curr.Data == oldValue)
+            {
+                curr.Data = newValue;
+            }
+            curr = curr.Next; //Move to the next node
+        }
     }
 
     /// <summary>
@@ -146,8 +209,14 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public IEnumerable Reverse()
     {
-        // TODO Problem 5
-        yield return 0; // replace this line with the correct yield return statement(s)
+        //Store the current node in the 'curr' variable starting at the tail
+        //Use the 'while' loop to iterate through the list until curr is null
+        var curr = _tail;// Since it is bacwards iteration, start at the tail
+        while(curr is not null)
+        {
+            yield return curr.Data; // Provide (yield) each item to the user
+            curr = curr.Prev; // Go backward in the linked list
+        }
     }
 
     public override string ToString()
