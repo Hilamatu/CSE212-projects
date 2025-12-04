@@ -11,7 +11,7 @@ public class Node
 
     public void Insert(int value)
     {
-        // TODO Start Problem 1
+        
 
         if (value < Data)
         {
@@ -21,7 +21,7 @@ public class Node
             else
                 Left.Insert(value);
         }
-        else
+        else if (value > Data)
         {
             // Insert to the right
             if (Right is null)
@@ -29,17 +29,47 @@ public class Node
             else
                 Right.Insert(value);
         }
+        else // value == Data
+        {
+            // Do nothing, no duplicates allowed
+        }
     }
 
     public bool Contains(int value)
     {
-        // TODO Start Problem 2
+        if (value == Data)
+        {
+            return true;
+        }
+        else if (value < Data)
+        {
+            //Search the left subtree
+            if (Left is not null)
+            {
+                return Left.Contains(value);
+            }
+        }
+        else // value > Data
+        {
+            // Search the right subtree
+            if (Right is not null)
+            {
+                return Right.Contains(value);
+            }
+        }
         return false;
     }
 
     public int GetHeight()
     {
-        // TODO Start Problem 4
-        return 0; // Replace this line with the correct return statement(s)
+        if (Left == null && Right == null)//If null, it is a leaf
+        {
+            return 1;
+        }
+        int LeftHeight = Left?.GetHeight() ?? 0;//If null, return 0 
+        int RightHeight = Right?.GetHeight() ?? 0;
+
+        return 1 + Math.Max(LeftHeight, RightHeight);//Add 1 for the current node and use MAX to get the taller subtree
+        
     }
 }
